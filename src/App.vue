@@ -1,23 +1,37 @@
 <template>
   <div id="app">
-    <CvButton>Hello world!</CvButton>
+    <Header />
+    <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { CvButton } from '@carbon/vue'
+import Home from '@/views/Home.vue'
+import Header from '@/components/Header.vue'
 
 @Component({
   components: {
-    CvButton
+    Header,
+    Home
   }
 })
 export default class App extends Vue {
-
 }
 </script>
 
-<style lang="scss">
-@import "./styles/carbon";
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
 </style>

@@ -1,66 +1,55 @@
 <template>
   <div class="home">
-    <input type="file" ref="fileLoader">
-    <div class="canvas--container">
-      <canvas ref="editCanvas"></canvas>
-    </div>
+    <input type="file" ref="loadFileInput" @change="onFileChange" hidden />
+    <button @click="onLoadClick">
+      Load Image
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-const xphotoWasm = import('xphoto-wasm')
 
 @Component
 export default class Home extends Vue {
-  mounted () {
-    const input = this.$refs.fileLoader as HTMLInputElement
-    const canvas = this.$refs.editCanvas as HTMLCanvasElement
+  onLoadClick () {
+    const imageLoader = this.$refs.loadFileInput as HTMLInputElement
+    imageLoader.click()
+  }
 
-    input.onchange = (event) => {
-      const target = event.target as HTMLInputElement
-      const image = new Image()
+  onFileChange (event: Event) {
+    const target = event.target as HTMLInputElement
 
-      if (target && target.files) {
-        const file = target.files.item(0)
-        const ctx = canvas.getContext('2d')
+    if (target && target.files) {
+      const file = target.files.item(0)
+      const fileName = URL.createObjectURL(file)
 
-        image.onload = function () {
-          if (ctx) {
-            console.log(`Image: ${image.width}x${image.height}`)
-            canvas.width = image.width
-            canvas.height = image.height
-
-            ctx.drawImage(image, 0, 0)
-
-            xphotoWasm.then(xphoto => {
-              const image = xphoto.open_image(canvas, ctx)
-
-              xphoto.putImageData(canvas, ctx, image)
-            })
-          }
-        }
-
-        image.src = URL.createObjectURL(file)
-      }
+      this.$router.push({ path: 'editor', query: { file: fileName } })
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.canvas--container {
-  padding: 0;
-  margin: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: #2c3e50;
+.home {
+  height: calc(100% - 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $carbon--gray-100;
 }
-canvas {
-  margin: 0 auto;
-  display: block;
-  height: 100%;
-  max-height: 400px;
+
+button {
+  color: $carbon--gray-10;
+  border: none;
+  width: 20%;
+  height: 3rem;
+  font-size: 2rem;
+  background: $carbon--blue-60;
+}
+
+button:hover {
+  cursor: pointer;
+  background: $carbon--blue-70;
 }
 </style>

@@ -1,1 +1,3 @@
-@import 'carbon-components/scss/globals/scss/styles';
+@import "~carbon-components/scss/globals/scss/colors";
+
+@include carbon--colors();
