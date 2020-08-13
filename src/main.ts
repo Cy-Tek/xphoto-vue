@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-import 'carbon-components/css/carbon-components.css'
+import 'carbon-components/css/carbon-components.min.css'
 
 Vue.config.productionTip = false
 
