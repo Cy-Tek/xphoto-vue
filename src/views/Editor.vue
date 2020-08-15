@@ -1,9 +1,9 @@
 <template>
   <div class="editor">
-    <div class="canvas--container bx--col-lg-8">
+    <div class="canvas--container bx--col-lg-9">
       <canvas ref="editCanvas"></canvas>
     </div>
-    <div class="preview--container bx--col-lg-4">
+    <div class="preview--container bx--col-lg-3">
       <div id="filter--menu">
         <h3>Filters:</h3>
         <label>
@@ -15,6 +15,19 @@
           <CvSearch />
         </div>
       </div>
+      <div id="filter--list">
+        <div class="filter">
+          <div class="filter--canvas_wrapper">
+            <canvas class="filter--canvas" ref="previewCanvas"></canvas>
+          </div>
+          <div class="filter--label">
+            <label>
+              RADIO
+              <input name="radio" type="checkbox">
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +36,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CvCheckbox, CvSearch } from '@carbon/vue'
 
-const xphotoWasm = import('xphoto-wasm')
+import { ImageManager } from 'xphoto-wasm'
 
 @Component({
   components: {
@@ -38,13 +51,15 @@ export default class Editor extends Vue {
   })
   fileName!: string
 
+  manager!: ImageManager
+
   mounted () {
     const canvas = this.$refs.editCanvas as HTMLCanvasElement
     const image = new Image()
 
     const ctx = canvas.getContext('2d')
 
-    image.onload = function () {
+    image.onload = () => {
       if (ctx) {
         console.log(`Image: ${image.width}x${image.height}`)
         canvas.width = image.width
@@ -52,10 +67,12 @@ export default class Editor extends Vue {
 
         ctx.drawImage(image, 0, 0)
 
-        xphotoWasm.then(xphoto => {
-          const photonImage = xphoto.open_image(canvas, ctx)
-          xphoto.putImageData(canvas, ctx, photonImage)
-        })
+        const previewCanvas = this.$refs.previewCanvas as HTMLCanvasElement
+
+        this.manager = ImageManager.load_from_canvas(canvas)
+        this.manager.gen_filter_preview(previewCanvas.scrollWidth, previewCanvas.scrollHeight)
+
+        this.manager.draw_filter_preview(previewCanvas, 'radio')
       }
     }
 
@@ -107,8 +124,39 @@ input[type='checkbox'] {
 
 #filter--search {
   flex-basis: 100%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+#filter--list {
+  flex-basis: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  .filter {
+    height: 320px;
+    width: 95%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    .filter--canvas_wrapper {
+      flex-basis: 100%;
+      flex-shrink: 0;
+
+      .filter--canvas {
+        max-width: 100%;
+        height: 200px;
+      }
+    }
+
+    .filter--label {
+      flex-basis: 100%;
+    }
+  }
 }
 
 canvas {
