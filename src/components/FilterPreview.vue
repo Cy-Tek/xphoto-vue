@@ -75,4 +75,44 @@ export default class FilterPreview extends Vue {
     flex-basis: 100%;
   }
 }
+
+.checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox > span {
+  color: $carbon--gray-10;
+  padding: 8px 4px;
+}
+
+.checkbox > input {
+  height: 25px;
+  width: 25px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid $carbon--gray-10;
+  outline: none;
+  transition-duration: 0.3s;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.checkbox > input:checked + span::before {
+  content: '\2713';
+  display: block;
+  text-align: center;
+  font-size: 22px;
+  color: $carbon--gray-10;
+  position: absolute;
+  left: 8px;
+  top: 4px;
+}
+
+.checkbox > input:active {
+  border: 2px solid $carbon--blue-50;
+}
+
 </style>
