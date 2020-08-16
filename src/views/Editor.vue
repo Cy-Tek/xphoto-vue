@@ -6,27 +6,13 @@
     <div class="preview--container bx--col-lg-3">
       <div id="filter--menu">
         <h3>Filters:</h3>
-        <label>
-          <input name="preview" type="checkbox" checked aria-checked="true" />
-          Preview
-        </label>
         <p id="clear">Clear all</p>
         <div id="filter--search">
           <CvSearch />
         </div>
       </div>
       <div id="filter--list">
-        <div class="filter">
-          <div class="filter--canvas_wrapper">
-            <canvas class="filter--canvas" ref="previewCanvas"></canvas>
-          </div>
-          <div class="filter--label">
-            <label>
-              RADIO
-              <input name="radio" type="checkbox">
-            </label>
-          </div>
-        </div>
+        <FilterPreview v-for="filter in filters" :key="filter" :filter-name="filter" :manager="manager" />
       </div>
     </div>
   </div>
@@ -37,9 +23,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CvCheckbox, CvSearch } from '@carbon/vue'
 
 import { ImageManager } from 'xphoto-wasm'
+import FilterPreview from '@/components/FilterPreview.vue'
 
 @Component({
   components: {
+    FilterPreview,
     CvCheckbox,
     CvSearch
   }
@@ -51,7 +39,24 @@ export default class Editor extends Vue {
   })
   fileName!: string
 
-  manager!: ImageManager
+  manager: ImageManager | null = null
+  filters: string[] = [
+    'oceanic',
+    'islands',
+    'marine',
+    'seagreen',
+    'flagblue',
+    'liquid',
+    'diamante',
+    'radio',
+    'twenties',
+    'rosetint',
+    'mauve',
+    'bluechrome',
+    'vintage',
+    'perfume',
+    'serenity'
+  ]
 
   mounted () {
     const canvas = this.$refs.editCanvas as HTMLCanvasElement
@@ -61,18 +66,12 @@ export default class Editor extends Vue {
 
     image.onload = () => {
       if (ctx) {
-        console.log(`Image: ${image.width}x${image.height}`)
         canvas.width = image.width
         canvas.height = image.height
 
         ctx.drawImage(image, 0, 0)
 
-        const previewCanvas = this.$refs.previewCanvas as HTMLCanvasElement
-
         this.manager = ImageManager.load_from_canvas(canvas)
-        this.manager.gen_filter_preview(previewCanvas.scrollWidth, previewCanvas.scrollHeight)
-
-        this.manager.draw_filter_preview(previewCanvas, 'radio')
       }
     }
 
@@ -97,6 +96,7 @@ export default class Editor extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 90%;
   height: 100%;
 }
 
@@ -134,34 +134,12 @@ input[type='checkbox'] {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-
-  .filter {
-    height: 320px;
-    width: 95%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-
-    .filter--canvas_wrapper {
-      flex-basis: 100%;
-      flex-shrink: 0;
-
-      .filter--canvas {
-        max-width: 100%;
-        height: 200px;
-      }
-    }
-
-    .filter--label {
-      flex-basis: 100%;
-    }
-  }
 }
 
 canvas {
   display: block;
   height: max-content;
+  max-width: 90%;
   max-height: 90%;
 }
 </style>
