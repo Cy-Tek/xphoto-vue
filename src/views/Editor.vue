@@ -12,7 +12,11 @@
         </div>
       </div>
       <div id="filter--list">
-        <FilterPreview v-for="filter in filters" :key="filter" :filter-name="filter" :manager="manager" />
+        <FilterPreview
+          v-for="filterItem in filters"
+          :key="filterItem.filter"
+          :filter="filterItem.filter"
+          :manager="manager" />
       </div>
     </div>
   </div>
@@ -22,7 +26,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { CvCheckbox, CvSearch } from '@carbon/vue'
 
-import { ImageManager } from 'xphoto-wasm'
+import { FilterType, ImageManager } from 'xphoto-wasm'
 import FilterPreview from '@/components/FilterPreview.vue'
 
 @Component({
@@ -40,22 +44,68 @@ export default class Editor extends Vue {
   fileName!: string
 
   manager: ImageManager | null = null
-  filters: string[] = [
-    'oceanic',
-    'islands',
-    'marine',
-    'seagreen',
-    'flagblue',
-    'liquid',
-    'diamante',
-    'radio',
-    'twenties',
-    'rosetint',
-    'mauve',
-    'bluechrome',
-    'vintage',
-    'perfume',
-    'serenity'
+
+  filters: { filter: FilterType; checked: boolean }[] = [
+    {
+      filter: FilterType.Oceanic,
+      checked: false
+    },
+    {
+      filter: FilterType.Islands,
+      checked: false
+    },
+    {
+      filter: FilterType.Marine,
+      checked: false
+    },
+    {
+      filter: FilterType.SeaGreen,
+      checked: false
+    },
+    {
+      filter: FilterType.FlagBlue,
+      checked: false
+    },
+    {
+      filter: FilterType.Liquid,
+      checked: false
+    },
+    {
+      filter: FilterType.Diamante,
+      checked: false
+    },
+    {
+      filter: FilterType.Radio,
+      checked: false
+    },
+    {
+      filter: FilterType.Twenties,
+      checked: false
+    },
+    {
+      filter: FilterType.RoseTint,
+      checked: false
+    },
+    {
+      filter: FilterType.Mauve,
+      checked: false
+    },
+    {
+      filter: FilterType.BlueChrome,
+      checked: false
+    },
+    {
+      filter: FilterType.Vintage,
+      checked: false
+    },
+    {
+      filter: FilterType.Perfume,
+      checked: false
+    },
+    {
+      filter: FilterType.Serenity,
+      checked: false
+    }
   ]
 
   mounted () {

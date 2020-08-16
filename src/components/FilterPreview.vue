@@ -5,8 +5,8 @@
     </div>
     <div class="filter--label">
       <label class="checkbox">
-        <input :name="filterName" type="checkbox">
-        <span>{{ filterName | capitalize }}</span>
+        <input :name="filter" type="checkbox">
+        <span>{{ filterName }}</span>
       </label>
     </div>
   </div>
@@ -15,21 +15,16 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { PropType } from 'vue'
-import { ImageManager } from 'xphoto-wasm'
+// eslint-disable-next-line @typescript-eslint/camelcase
+import { FilterType, get_filter_name, ImageManager } from 'xphoto-wasm'
 
-@Component({
-  filters: {
-    capitalize (value: string): string {
-      return value.toLocaleUpperCase()
-    }
-  }
-})
+@Component
 export default class FilterPreview extends Vue {
   @Prop({
     required: true,
-    type: String
+    type: Object as PropType<FilterType>
   })
-  filterName!: string
+  filter!: FilterType
 
   @Prop({
     type: Object as PropType<ImageManager>,
@@ -41,8 +36,12 @@ export default class FilterPreview extends Vue {
   onManagerInitialized (newManager: ImageManager | undefined) {
     if (newManager) {
       const canvas = this.$refs.previewCanvas as HTMLCanvasElement
-      newManager.draw_filter_preview(canvas, this.filterName)
+      newManager.draw_filter_preview(canvas, this.filter)
     }
+  }
+
+  get filterName (): string {
+    return get_filter_name(this.filter).toLocaleUpperCase()
   }
 }
 </script>
