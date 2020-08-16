@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <div class="canvas--container bx--col-lg-9">
+    <div class="canvas--container bx--col-sm-4 bx--col-lg-9">
       <canvas ref="editCanvas"></canvas>
     </div>
     <div class="preview--container bx--col-lg-3">

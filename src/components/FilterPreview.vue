@@ -56,7 +56,7 @@ export default class FilterPreview extends Vue {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border-top: $carbon--gray-90 solid 3px;
+  border-top: $carbon--gray-80 solid 3px;
 
   .filter--canvas_wrapper {
     display: flex;
