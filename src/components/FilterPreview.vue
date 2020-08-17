@@ -1,11 +1,11 @@
 <template>
-  <div class="filter">
+  <div class="filter" @click="onToggled" >
     <div class="filter--canvas_wrapper">
       <canvas class="filter--canvas" ref="previewCanvas"></canvas>
     </div>
     <div class="filter--label">
-      <label class="checkbox">
-        <input :name="filter" type="checkbox">
+      <label class="checkbox" @click="checkBoxClicked">
+        <input :name="filter" :checked="checked" type="checkbox">
         <span>{{ filterName }}</span>
       </label>
     </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
 import { PropType } from 'vue'
 // eslint-disable-next-line @typescript-eslint/camelcase
 import { FilterType, get_filter_name, ImageManager } from 'xphoto-wasm'
@@ -27,10 +27,24 @@ export default class FilterPreview extends Vue {
   filter!: FilterType
 
   @Prop({
+    required: true,
+    type: Boolean
+  })
+  checked!: boolean
+
+  @Prop({
     type: Object as PropType<ImageManager>,
     default: undefined
   })
   manager!: ImageManager | undefined
+
+  @Emit('toggled')
+  onToggled (): { filter: FilterType; checked: boolean } {
+    return {
+      filter: this.filter,
+      checked: !this.checked
+    }
+  }
 
   @Watch('manager')
   onManagerInitialized (newManager: ImageManager | undefined) {
@@ -42,6 +56,10 @@ export default class FilterPreview extends Vue {
 
   get filterName (): string {
     return get_filter_name(this.filter).toLocaleUpperCase()
+  }
+
+  checkBoxClicked (e: Event) {
+    e.preventDefault()
   }
 }
 </script>
@@ -56,6 +74,7 @@ export default class FilterPreview extends Vue {
   align-items: center;
   justify-content: center;
   border-top: $carbon--gray-80 solid 3px;
+  cursor: pointer;
 
   .filter--canvas_wrapper {
     display: flex;

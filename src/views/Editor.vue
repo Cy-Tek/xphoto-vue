@@ -13,10 +13,12 @@
       </div>
       <div id="filter--list">
         <FilterPreview
-          v-for="filterItem in filters"
-          :key="filterItem.filter"
-          :filter="filterItem.filter"
-          :manager="manager" />
+          v-for="{ filter, checked } in filters"
+          :key="filter"
+          :filter="filter"
+          :manager="manager"
+          :checked="checked"
+          @toggled="toggleFilter"/>
       </div>
     </div>
   </div>
@@ -126,6 +128,20 @@ export default class Editor extends Vue {
     }
 
     image.src = this.fileName
+  }
+
+  toggleFilter (event: { filter: FilterType; checked: boolean }) {
+    const filter = this.filters.find(item => item.filter === event.filter)
+
+    if (filter) {
+      filter.checked = event.checked
+
+      if (this.manager && event.checked) {
+        this.manager.add_filter(event.filter)
+      } else if (this.manager && !event.checked) {
+        this.manager.remove_filter(event.filter)
+      }
+    }
   }
 }
 </script>
