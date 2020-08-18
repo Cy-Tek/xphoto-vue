@@ -6,7 +6,7 @@
     <div class="preview--container bx--col-lg-3">
       <div id="filter--menu">
         <h3>Filters:</h3>
-        <p id="clear">Clear all</p>
+        <button @click="saveImage">Save Image</button>
         <div id="filter--search">
           <CvSearch />
         </div>
@@ -16,9 +16,9 @@
           v-for="{ filter, checked } in filters"
           :key="filter"
           :filter="filter"
-          :manager="manager"
           :checked="checked"
-          @toggled="toggleFilter"/>
+          :manager="manager"
+          @toggled="toggleFilter" />
       </div>
     </div>
   </div>
@@ -142,6 +142,19 @@ export default class Editor extends Vue {
         this.manager.remove_filter(event.filter)
       }
     }
+  }
+
+  saveImage () {
+    const downloadLink = document.createElement('a')
+    const canvas = this.$refs.editCanvas as HTMLCanvasElement
+
+    downloadLink.setAttribute('download', 'CanvasAsImage.png')
+
+    canvas.toBlob(function (blob) {
+      const url = URL.createObjectURL(blob)
+      downloadLink.setAttribute('href', url)
+      downloadLink.click()
+    })
   }
 }
 </script>

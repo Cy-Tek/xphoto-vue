@@ -22,7 +22,7 @@ import { FilterType, get_filter_name, ImageManager } from 'xphoto-wasm'
 export default class FilterPreview extends Vue {
   @Prop({
     required: true,
-    type: Object as PropType<FilterType>
+    type: Number as PropType<FilterType>
   })
   filter!: FilterType
 
@@ -36,7 +36,7 @@ export default class FilterPreview extends Vue {
     type: Object as PropType<ImageManager>,
     default: undefined
   })
-  manager!: ImageManager | undefined
+  manager?: ImageManager
 
   @Emit('toggled')
   onToggled (): { filter: FilterType; checked: boolean } {
