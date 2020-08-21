@@ -6,7 +6,7 @@
     <div class="preview--container bx--col-lg-3">
       <div id="filter--menu">
         <h3>Filters:</h3>
-        <button @click="saveImage">Save Image</button>
+        <button class="button-primary" @click="saveImage">Save Image</button>
         <div id="filter--search">
           <CvSearch />
         </div>
@@ -167,6 +167,20 @@ export default class Editor extends Vue {
   flex-wrap: wrap;
   background: $carbon--gray-100;
   color: $carbon--gray-10;
+}
+
+button {
+  color: $carbon--gray-10;
+  border: none;
+  margin-top: 2px;
+  height: 2rem;
+  font-size: 1.25rem;
+  background: $carbon--blue-60;
+}
+
+button:hover {
+  cursor: pointer;
+  background: $carbon--blue-70;
 }
 
 .canvas--container {
