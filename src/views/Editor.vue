@@ -7,9 +7,6 @@
       <div id="filter--menu">
         <h3>Filters:</h3>
         <button class="button-primary" @click="saveImage">Save Image</button>
-        <div id="filter--search">
-          <CvSearch />
-        </div>
       </div>
       <div id="filter--list">
         <FilterPreview
