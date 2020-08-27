@@ -26,6 +26,7 @@ body, html {
   padding: 0;
   height: 100%;
   background-color: #161616;
+  font-family: sans-serif;
 }
 
 * {
